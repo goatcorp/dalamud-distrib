@@ -1,9 +1,9 @@
-name: Build Dalamud
+name: Promote to live
 on: [workflow_dispatch]
 
 jobs:
   promote:
-    name: Deploy dalamud-distrib staging
+    name: Promote staging version to live
     runs-on: windows-latest
     steps:
     - uses: actions/checkout@v2
