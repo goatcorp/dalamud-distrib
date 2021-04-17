@@ -1,0 +1,44 @@
+name: Build Dalamud
+on: [workflow_dispatch]
+
+jobs:
+  promote:
+    name: Deploy dalamud-distrib staging
+    runs-on: windows-latest
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Generate dalamud-distrib version file
+      shell: powershell
+      run: |
+        Expand-Archive -Path .\stg\latest.zip -DestinationPath .\scratch
+        
+        $dllBytes = [System.IO.File]::ReadAllBytes("$(Get-Location)\scratch\Dalamud.dll")
+        $assembly = [System.Reflection.Assembly]::Load($dllBytes)
+        $newVersion = $assembly.GetName().Version.ToString()
+        Remove-Item -Force -Recurse .\scratch
+
+        $versionData = Get-Content .\version | ConvertFrom-Json
+        $oldVersion = $versionData.AssemblyVersion
+        if ($oldVersion -eq $newVersion) {
+          Write-Host "Nothing to promote"
+        } else {
+          Move-Item -Force -Path .\stg\latest.zip -Destination .\latest.zip
+          $versionData.AssemblyVersion = $newVersion
+          $versionData | ConvertTo-Json -Compress | Out-File .\version
+          
+          Write-Host "Promotion OK"
+        }
+        
+        echo "DVER=${newVersion}" >> $Env:GITHUB_ENV
+        
+    - name: Commit changes
+      shell: bash
+      run: |
+        git config --global user.name "Actions User"
+        git config --global user.email "actions@github.com"
+        
+        git add .
+        git commit -m "[CI] Promoting for ${DVER}" || true
+        
+        git push origin main || true
