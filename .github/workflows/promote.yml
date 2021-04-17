@@ -23,7 +23,7 @@ jobs:
         if ($oldVersion -eq $newVersion) {
           Write-Host "Nothing to promote"
         } else {
-          Move-Item -Force -Path .\stg\latest.zip -Destination .\latest.zip
+          Copy-Item -Force -Path .\stg\latest.zip -Destination .\latest.zip
           $versionData.AssemblyVersion = $newVersion
           $versionData | ConvertTo-Json -Compress | Out-File .\version
           
