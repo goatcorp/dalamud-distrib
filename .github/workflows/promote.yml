@@ -1,5 +1,11 @@
 name: Promote to live
-on: [workflow_dispatch]
+on: 
+  workflow_dispatch:
+    inputs:
+      track:
+        description: 'Track'     
+        required: true
+        default: 'stg'
 
 jobs:
   promote:
@@ -10,8 +16,11 @@ jobs:
 
     - name: Generate dalamud-distrib version file
       shell: powershell
+      env:
+        DALAMUD_TRACK: ${{ github.event.inputs.track }}
       run: |
-        Expand-Archive -Path .\stg\latest.zip -DestinationPath .\scratch
+        $trackName = $env:DALAMUD_TRACK
+        Expand-Archive -Path ".\${trackName}\latest.zip" -DestinationPath .\scratch
         
         $dllBytes = [System.IO.File]::ReadAllBytes("$(Get-Location)\scratch\Dalamud.dll")
         $assembly = [System.Reflection.Assembly]::Load($dllBytes)
@@ -23,7 +32,7 @@ jobs:
         if ($oldVersion -eq $newVersion) {
           Write-Host "Nothing to promote"
         } else {
-          Copy-Item -Force -Path .\stg\latest.zip -Destination .\latest.zip
+          Copy-Item -Force -Path ".\${trackName}\latest.zip" -Destination .\latest.zip
           $versionData.AssemblyVersion = $newVersion
           $versionData | ConvertTo-Json -Compress | Out-File .\version
           
@@ -39,6 +48,6 @@ jobs:
         git config --global user.email "actions@github.com"
         
         git add .
-        git commit -m "[CI] Promoting for ${DVER}" || true
+        git commit -m "[CI] Promoting for ${DVER} from ${{ github.event.inputs.track }}" || true
         
         git push origin main || true
