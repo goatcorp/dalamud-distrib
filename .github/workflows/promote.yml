@@ -34,7 +34,8 @@ jobs:
         } else {
           Copy-Item -Force -Path ".\${trackName}\latest.zip" -Destination .\latest.zip
           $versionData.AssemblyVersion = $newVersion
-          [System.IO.File]::WriteAllLines(".\version", $versionData | ConvertTo-Json -Compress)
+          $versionText = $versionData | ConvertTo-Json -Compress
+          [System.IO.File]::WriteAllLines(".\version", $versionText)
           
           Write-Host "Promotion OK"
         }
