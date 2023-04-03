@@ -53,8 +53,19 @@ jobs:
           Write-Host "Promotion OK for canary"
         }
         
+        echo "OLD_DVER=${oldVersion}" >> $Env:GITHUB_ENV
         echo "DVER=${newVersion}" >> $Env:GITHUB_ENV
         
+        
+    - uses: trstringer/manual-approval@a824dad59ac64ac825ab8725599e483e24aa2815
+      with:
+        secret: ${{ github.TOKEN }}
+        approvers: dalamud-maintainers
+        minimum-approvals: 2
+        issue-title: "Deploying ${DVER} to ${{ github.event.inputs.skip-canary == true && 'release' || 'canary' }} from ${{ github.event.inputs.track }}"
+        issue-body: "Please approve or deny the promotion of version ${DVER}(prev ${OLD_DVER}) to ${{ github.event.inputs.skip-canary == true && 'release' || 'canary' }} from ${{ github.event.inputs.track }}."
+        exclude-workflow-initiator-as-approver: true
+
     - name: Commit changes
       shell: bash
       run: |
