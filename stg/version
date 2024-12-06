@@ -1,1 +1,1 @@
-{"AssemblyVersion":"11.0.2.0","SupportedGameVer":"2023.03.24.0000.0000","RuntimeVersion":"7.0.0","RuntimeRequired":true,"Key":"halloumi","GitSha":"fd0b6722adcc3a3745c29d937c4a9f6702086b26","Revision":"5472"}
+{"AssemblyVersion":"11.0.2.0-5-g722ee323","SupportedGameVer":"2023.03.24.0000.0000","RuntimeVersion":"7.0.0","RuntimeRequired":true,"Key":"halloumi","GitSha":"722ee32353c13d370b13ea3542c52f56974d6cfb","Revision":"5477"}
