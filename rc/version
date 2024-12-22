@@ -1,1 +1,1 @@
-{"AssemblyVersion":"11.0.3.0-4-gc647d07d","SupportedGameVer":"2022.11.09.0000.0000","RuntimeVersion":"9.0.0","RuntimeRequired":true,"Key":"yuzu","GitSha":"c647d07d94f7f6e2f192d22d3900f18e583df529","Revision":"5485"}
+{"AssemblyVersion":"11.0.4.0","SupportedGameVer":"2022.11.09.0000.0000","RuntimeVersion":"9.0.0","RuntimeRequired":true,"Key":"yuzu","GitSha":"c647d07d94f7f6e2f192d22d3900f18e583df529","Revision":"5485"}
