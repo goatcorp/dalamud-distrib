@@ -10,6 +10,9 @@ on:
         type: boolean
         description: Skip Canary
 
+permissions:
+  contents: write # to write update to repo
+
 jobs:
   promote:
     name: Promote staging version to live
